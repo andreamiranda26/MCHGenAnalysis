@@ -2,9 +2,9 @@
 ---
 Mulchatna caribou project analysis
 author: 
-    - Andrea Miranda
+    - Andrea Miranda Paez
     - Gabriel Silva
-    - Janna Willoughby
+    - Janna R. Willoughby
 date: 07/31/24
 ---
 
