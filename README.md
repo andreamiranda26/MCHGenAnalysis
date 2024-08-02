@@ -1,6 +1,6 @@
 # MCHGenAnalysis
 ---
-title: Andrea Miranda caribou project analysis
+Mulchatna caribou project analysis
 author: 
     - Andrea Miranda
     - Gabriel Silva
