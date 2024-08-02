@@ -5,7 +5,7 @@ author:
     - Andrea Miranda
     - Gabriel Silva
     - Janna Willoughby
-date: today
+date: 07/31/24
 ---
 
 ## Introduction
