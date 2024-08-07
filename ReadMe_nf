@@ -1,0 +1,74 @@
+---
+title: Andrea Miranda Paez caribou project analysis
+author: 
+    - Gabriel Silva
+    - Andrea Miranda Paez
+    - Janna R. Willoughby
+date: 07/30/2024
+---
+
+## Introduction
+
+This is a project to analyze the caribou population in the Southwest Alaska. The data was collected by Andrea Miranda Paez and her team. The data is stored in the `data/` directory. The analysis is stored in the `analysis/` directory.
+
+## Data
+
+### Samples
+
+Raw fastq files are located in the `data/raw/` directory as symbolic links to the original files.
+
+### Reference genome
+
+Genome assembly **mRanTar1.h1.1** of _Rangifer tarandus_ was used as the reference genome. It is stored in the `data/reference/` directory.
+
+## Analysis
+
+### RAD-seq Nextflow pipeline
+
+The RAD-seq pipeline was used to analyze the data. The pipeline is stored in the `radseq/` directory.
+
+To appropriately run the pipeline on Easley using slurm and the correct queues, a custom configuration file was created and placed as `radseq/conf/custom.config`. The file contains the following:
+
+```groovy
+process { 
+    executor="slurm"
+    queue="jrw0107_std,general,nova"
+}
+```
+Set up was done as follows:
+
+```bash
+# Create nextflow mamba/conda environment
+
+mamba create -n Nextflow nextflow graphviz ncbi-datasets-cli gzip
+
+# Activate the environment
+
+mamba activate Nextflow
+
+# Download the pipeline
+
+nextflow clone nf-core/radseq -r dev
+```
+
+To run the pipeline, the following command was used through a bash script `nextflow/runMe_Nextflow.sh`:
+
+```bash
+#!/usr/bin/env bash
+
+module load gcc/4.8.5
+module load squashfs/4.4
+module load singularity/3.8.4
+
+INPUT="/home/gas0042/CaribouProject/nextflow/input.csv"
+GENOME="/home/gas0042/CaribouProject/data/reference/GCA_949782905.1_mRanTar1.h1.1_genomic.fna"
+EMAIL="gabriel.silva@auburn.edu"
+MULTIQC_TITLE="Caribou GBS"
+
+nextflow run nf-core/radseq -r dev -profile singularity -c radseq/conf/custom.config \
+    -resume --aligner 'bwamem2' --sequence_type 'SE' \
+    --input $INPUT \
+    --genome $GENOME \
+    --email $EMAIL \
+    --multiqc_title $MULTIQC_TITLE
+```
